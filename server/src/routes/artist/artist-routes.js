@@ -1,7 +1,7 @@
-const express = require('express');
-const views = require('./artist');
+import express from 'express';
+import * as views from "./artist.js"
 const router = express.Router();
 
 router.get("/", views.test)
 
-module.exports = router;
+export default router;

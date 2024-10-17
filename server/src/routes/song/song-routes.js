@@ -1,5 +1,5 @@
-const express = require('express')
-const views = require("./song");
+import express from "express";
+import * as views from "./song.js";
 const router = express.Router();
 
-module.exports = router;
+export default router

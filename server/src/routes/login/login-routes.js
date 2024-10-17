@@ -1,5 +1,5 @@
-const express = require('express');
-const views = require('./login');
+import express from 'express';
+import * as views from "./login.js"
 const router = express.Router();
 
-module.exports = router;
+export default router;

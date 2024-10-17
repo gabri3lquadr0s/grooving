@@ -1,13 +1,14 @@
-require("dotenv").config();
-const express = require('express');
-const loginRoutes = require('./src/routes/login/login-routes');
-const userRoutes = require('./src/routes/user/user-routes');
-const albumRoutes = require('./src/routes/album/album-routes');
-const artistRoutes = require('./src/routes/artist/artist-routes');
-const songRoutes = require('./src/routes/song/song-routes');
-const playlistRoutes = require('./src/routes/playlist/playlist-routes');
-const db = require('./src/db/db');
+import dotenv from 'dotenv';
+import express from 'express';
+import loginRoutes from './src/routes/login/login-routes.js';
+import userRoutes from './src/routes/user/user-routes.js';
+import albumRoutes from './src/routes/album/album-routes.js';
+import artistRoutes from './src/routes/artist/artist-routes.js';
+import songRoutes from './src/routes/song/song-routes.js';
+import playlistRoutes from './src/routes/playlist/playlist-routes.js';
+import db from './src/db/db.js';
 
+dotenv.config();
 const app = express();
 
 app.use(express.urlencoded({extended:true}));
@@ -23,7 +24,13 @@ app.get('/', (req, res) => {
 });
 
 try {
-    db.sync(() => console.log(`\nConnected with database at port ${process.env.DB_HOST}`));
+    db.sync({})
+        .then(() => {
+            console.log("All models were synchronized successfully.");
+        })
+        .catch((error) => {
+            console.error("Error synchronizing the models:", error);
+        });
     app.listen(process.env.PORT || 8000, () => console.log(`Server running on http://localhost:${process.env.PORT || 8000}\n`));
 } catch(err) {
     console.error(`\nError in running server: ${err}\n`);
