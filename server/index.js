@@ -7,6 +7,7 @@ import artistRoutes from './src/routes/artist/artist-routes.js';
 import songRoutes from './src/routes/song/song-routes.js';
 import playlistRoutes from './src/routes/playlist/playlist-routes.js';
 import db from './src/db/db.js';
+import { User, PlaysList, Artist, Album, Song, Genre } from './src/db/models.js'
 
 dotenv.config();
 const app = express();
@@ -20,7 +21,7 @@ app.use("/v1/artist", artistRoutes);
 app.use("/v1/album", songRoutes);
 app.use("/v1/playlist", playlistRoutes);
 app.get('/', (req, res) => {
-    return("Welcome to the v1 Sonar API!!");
+    return res.status(200).json({"msg": "Welcome to the Grooving API"});
 });
 
 try {

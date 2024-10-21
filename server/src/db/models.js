@@ -1,5 +1,6 @@
-import Sequelize from 'sequelize';
-import db from './db';
+import Sequelize, {DataTypes} from 'sequelize';
+import db from './db.js';
+
 
 //USER TABLE
 const User = db.define(
@@ -23,14 +24,40 @@ const User = db.define(
             type: Sequelize.STRING,
             notNull: true,
         },
-        status: {
+        active: {
             type: Sequelize.BOOLEAN,
             notNull: true,
         },
         profileImage: {
             type: Sequelize.STRING,
-            notNull: false,
+        },
+        isAdmin: {
+            type: Sequelize.BOOLEAN,
+            notNull: true,
         }
+    }
+);
+
+const Artist = db.define(
+    "Artist",
+    {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        name: {
+            type: Sequelize.STRING,
+            notNull: true,
+        },
+        description: {
+            type: Sequelize.STRING,
+        },
+        profileImage: {
+            type: Sequelize.STRING,
+            notNull: false,
+        },
+
     }
 )
 
@@ -38,13 +65,21 @@ const User = db.define(
 const PlaysList = db.define(
     "PlayList",
     {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        name: {
+            type: Sequelize.STRING,
+            notNull: true,
+        },
 
     }
-)
+);
 
-//ARTIST TABLE
-const Artist = db.define(
-    "Artist",
+const PlayList_Sharing = db.define(
+    "PlayList_Sharing",
     {
 
     }
@@ -54,17 +89,63 @@ const Artist = db.define(
 const Album = db.define(
     "Album",
     {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        name: {
+            type: Sequelize.STRING,
+            notNull: true,
+        },
+        type: {
+            type: DataTypes.ENUM('lp', 'ep', 'single'),
+        },
+        totalTimeSec: {
+            type: DataTypes.INTEGER,
+            notNull: true,
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            notNull: true,
+        },
 
     }
-)
+);
+
+const Genre = db.define(
+    "Genre",
+    {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        name: {
+            type: Sequelize.STRING,
+            notNull: true,
+        }
+    }
+);
 
 //SONG TABLE
 const Song = db.define(
     "Song",
     {
-
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
     }
-)
+);
 
-export { User, PlaysList, Artist, Album, Song }
+//RELATIONS
+PlaysList.belongsToMany(User, {through: "PlayList_User"})
+Song.belongsToMany(PlaysList, {through: "Song_PlayList"});
+Song.belongsToMany(Album, {through: "Song_Album"});
+Album.belongsToMany(Artist, {through: "Album_Artist"});
+Album.belongsToMany(Genre, {through: "Album_Genre"});
+
+export { User, PlaysList, Artist, Album, Song, Genre }
 
