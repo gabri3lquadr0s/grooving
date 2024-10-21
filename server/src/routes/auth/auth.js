@@ -9,7 +9,7 @@ const login = async (req, res) => {
         const userExists = await User.findAll({where: {email: email}});
         if(userExists[0] === undefined) {
             return res.status(400).send({
-                "error": "User does not exist",
+                "error": "Incorrect email or password",
             });
         }
 
@@ -28,7 +28,7 @@ const login = async (req, res) => {
             })
         } else {
             return res.status(400).send({
-                "error": "Incorrect password",
+                "error": "Incorrect email or password",
             });
         }
 
