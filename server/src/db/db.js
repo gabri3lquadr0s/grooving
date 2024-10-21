@@ -15,6 +15,7 @@ const db = new Sequelize(dbName, dbUser, dbPassword, {
     password: dbPassword,
     port: 5432,
     ssl: true,
+    logging: false
 });
 
 export default db;
