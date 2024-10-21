@@ -53,9 +53,10 @@ const createUser = async (req, res) => {
 const getUsers = async (req, res) => {
     try {
         let users;
-        let { page, size } = req.query;
-        if(page === undefined) page = 0;
-        if(size === undefined || size === 0) size = 20;
+        let { page, size, userType } = req.query;
+        if(!userType) userType = "artist";
+        if(!page) page = 0;
+        if(!size || size === "0") size = 20;
         page = parseInt(page);
         size = parseInt(size);
 
@@ -63,6 +64,9 @@ const getUsers = async (req, res) => {
             users = await User.findAll({
                 attributes: {
                     exclude: ['password']
+                },
+                where: {
+                    userType: userType
                 },
             });
         }
@@ -72,6 +76,9 @@ const getUsers = async (req, res) => {
                 attributes: {
                     exclude: ['password']
                 },
+                where: {
+                    userType: userType
+                },
             });
         }
         if(page > 1) {
@@ -80,6 +87,9 @@ const getUsers = async (req, res) => {
                 offset: (page - 1) * size,
                 attributes: {
                     exclude: ['password']
+                },
+                where: {
+                    userType: userType
                 },
             });
         }
@@ -96,6 +106,7 @@ const getUsers = async (req, res) => {
 }
 
 
+
 const getUserById = async (req, res) => {
     try {
         let { id } = req.query;
@@ -103,7 +114,7 @@ const getUserById = async (req, res) => {
 
         const user = await User.findAll({
             where: {
-                id: id,
+                id: id
             },
             attributes: {
                 exclude: ['password']
@@ -130,9 +141,10 @@ const getUserById = async (req, res) => {
 const getUsersByName = async (req, res) => {
     try {
         let users;
-        let { page, size, userName } = req.query;
-        if(page === undefined) page = 0;
-        if(size === undefined || size === 0) size = 20;
+        let { page, size, userName, userType } = req.query;
+        if(!userType) userType = "artist";
+        if(!page) page = 0;
+        if(!size || size === "0") size = 20;
         page = parseInt(page);
         size = parseInt(size);
 
@@ -140,6 +152,7 @@ const getUsersByName = async (req, res) => {
             users = await User.findAll({
                 where: {
                   username: userName,
+                    userType: userType
                 },
                 attributes: {
                     exclude: ['password']
@@ -150,6 +163,7 @@ const getUsersByName = async (req, res) => {
             users = await User.findAll({
                 where: {
                     username: userName,
+                    userType: userType
                 },
                 attributes: {
                     exclude: ['password']
@@ -161,6 +175,7 @@ const getUsersByName = async (req, res) => {
             users = await User.findAll({
                 where: {
                     username: userName,
+                    userType: userType
                 },
                 attributes: {
                     exclude: ['password']

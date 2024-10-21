@@ -5,7 +5,6 @@ import swaggerUi from 'swagger-ui-express';
 import authRoutes from './src/routes/auth/auth-routes.js';
 import userRoutes from './src/routes/user/user-routes.js';
 import albumRoutes from './src/routes/album/album-routes.js';
-import artistRoutes from './src/routes/artist/artist-routes.js';
 import songRoutes from './src/routes/song/song-routes.js';
 import playlistRoutes from './src/routes/playlist/playlist-routes.js';
 import db from './src/db/db.js';
@@ -40,7 +39,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/v1/auth", authRoutes);
 app.use("/v1/user", userRoutes);
 app.use("/v1/album", albumRoutes);
-app.use("/v1/artist", artistRoutes);
 app.use("/v1/song", songRoutes);
 app.use("/v1/playlist", playlistRoutes);
 app.get('/', (req, res) => {
