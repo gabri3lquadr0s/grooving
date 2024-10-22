@@ -49,12 +49,19 @@ const validate = async (req, res, next) => {
             if(err) return res.status(401).send({
                 "error": "Unauthorized",
             });
-            console.log(req.route)
-            const method = req.route.stack[1].method;
+            let method = req.route.stack[1].method;
             if(method === "deleteUser" || method === "updateUser") {
                 if(user.id !== parseInt(req.params.id)) return res.status(401).send({
                     "error": "Unauthorized",
                 });
+            }
+            if(method === "multerMiddleware") {
+                method = req.route.stack[2].method;
+                if(method === "createAlbum" || method === "deleteAlbum") {
+                    if(user.userType === "user") return res.status(401).send({
+                        "error": "Unauthorized",
+                    });
+                }
             }
             req.user = user;
             next();
