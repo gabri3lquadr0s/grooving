@@ -13,21 +13,21 @@ const User = db.define(
         },
         username: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
         },
         email: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
             unique: true,
         },
         password: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
         },
         active: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
-            default: false,
+            defaultValue: false,
         },
         profileImage: {
             type: Sequelize.STRING,
@@ -35,7 +35,7 @@ const User = db.define(
         userType: {
             type: DataTypes.ENUM('user', 'artist', 'admin'),
             defaultValue: 'user',
-            notNull: true,
+            allowNull: false,
         },
         description: {
             type: Sequelize.STRING,
@@ -62,7 +62,7 @@ const PlaysList = db.define(
         },
         name: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
         },
         playlistImage: {
             type: Sequelize.STRING,
@@ -81,23 +81,22 @@ const Album = db.define(
         },
         name: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
         },
         type: {
             type: DataTypes.ENUM('lp', 'ep', 'single'),
         },
         totalTimeSec: {
             type: Sequelize.INTEGER,
-            notNull: true,
         },
         createdAt: {
             type: Sequelize.DATE,
-            notNull: true,
+            allowNull: false,
             default: Sequelize.NOW,
         },
         albumImage: {
             type: Sequelize.STRING,
-            notNull: false,
+            allowNull: false,
         },
     },
 );
@@ -112,7 +111,7 @@ const Genre = db.define(
         },
         name: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
         }
     }
 );
@@ -128,37 +127,50 @@ const Song = db.define(
         },
         name: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
         },
         totalTimeSec: {
             type: Sequelize.INTEGER,
-            notNull: true,
+            allowNull: false,
         },
         link: {
             type: Sequelize.STRING,
-            notNull: true,
+            allowNull: false,
         }
     },
 );
+
+//RELATIONS
+Album.hasMany(Song, {onDelete: 'CASCADE'});
+Song.belongsTo(Album);
+
+User.hasMany(Album, {onDelete: 'CASCADE'});
+Album.belongsTo(User);
 
 const PlayList_User = db.define(
     "PlayList_User",
     {
         isOwner: {
             type: Sequelize.BOOLEAN,
-            notNull: true,
+            allowNull: false,
             default: false,
         },
     },
 );
-
-//RELATIONS
 PlaysList.belongsToMany(User, {through: "PlayList_User", onDelete: 'CASCADE'});
-Song.belongsToMany(PlaysList, {through: "Song_PlayList", onDelete: 'CASCADE'});
-Song.belongsToMany(Album, {through: "Song_Album", onDelete: 'CASCADE'});
-Album.belongsToMany(User, {through: "Album_Artist", onDelete: 'CASCADE'});
-Song.belongsToMany(Genre, {through: "Song_Genre"});
-User.belongsToMany(Genre, {through: "Artist_Genre"});
+User.belongsToMany(PlaysList, {through: "PlayList_User", onDelete: 'CASCADE'});
 
-export { User, PlaysList, Album, Song, Genre }
+const Song_PlayList = db.define("Song_PlayList", {});
+Song.belongsToMany(PlaysList, {through: "Song_PlayList", onDelete: 'CASCADE'});
+PlaysList.belongsToMany(Song, {through: "Song_PlayList", onDelete: 'CASCADE'});
+
+const Song_Genre = db.define("Song_Genre", {});
+Song.belongsToMany(Genre, {through: "Song_Genre"});
+Genre.belongsToMany(Song, {through: "Song_Genre"});
+
+const Artist_Genre = db.define("Artist_Genre", {});
+User.belongsToMany(Genre, {through: "Artist_Genre"});
+Genre.belongsToMany(User, {through: "Artist_Genre"});
+
+export { User, PlaysList, Album, Song, Genre, PlayList_User, Song_PlayList, Song_Genre, Artist_Genre}
 

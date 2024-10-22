@@ -9,7 +9,7 @@ const upload = multer({ storage });
 
 router.get("/", views.getAlbums);
 router.get("/:id", views.getAlbumById);
-router.post("/", validate, upload.fields([{ name: 'songs', maxCount: 100 }]), views.createAlbum)
+router.post("/", validate, upload.fields([{ name: "songs", maxCount: 100 }, {name: "albumImage", maxCount: 1}]), views.createAlbum)
 router.delete("/:id", validate, views.deleteAlbum);
 
 export default router;

@@ -44,11 +44,13 @@ const uploadAudio = async (file) => {
                         });
                     }
                 );
+                stream.end(file.buffer);
             }
         );
         return audioResult.url;
     }
     catch (e) {
+        console.log(e)
         return "err";
     }
 }
