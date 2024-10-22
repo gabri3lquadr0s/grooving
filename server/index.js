@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import { v2 as cloudinary } from 'cloudinary';
 import authRoutes from './src/routes/auth/auth-routes.js';
 import userRoutes from './src/routes/user/user-routes.js';
 import albumRoutes from './src/routes/album/album-routes.js';
@@ -13,28 +12,14 @@ import { User, PlaysList, Album, Song, Genre } from './src/db/models.js'
 dotenv.config();
 const app = express();
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
-
-const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Grooving API',
-            version: '0.1.0',
-            description: 'API documentation for Grooving Music App',
-            servers: [
-                {
-                    url: `http://localhost:${process.env.PORT || 8000}`,
-                },
-            ],
-        },
-    },
-    apis: ['./src/routes/**/*.js'],
-};
-
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use("/v1/auth", authRoutes);
 app.use("/v1/user", userRoutes);

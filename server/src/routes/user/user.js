@@ -1,5 +1,8 @@
 import {User} from "../../db/models.js";
 import * as bcrypt from 'bcrypt';
+import {uploadImage} from "../../cloudinary/cloudinary.js";
+import whereCondition from "pg/lib/query.js";
+import {Op} from "sequelize";
 
 const createUser = async (req, res) => {
     try {
@@ -27,11 +30,11 @@ const createUser = async (req, res) => {
             });
         }
 
-        if(data.profileImage){
-            //make logic for profile pic
+        if(req.files) {
+            const imageFile = req.files['profilePic'][0];
+            const upload = await uploadImage(imageFile);
+            if(upload !== "err") data.profileImage = upload;
         }
-
-        //make logic for 2fa
 
         const salt = await bcrypt.genSalt();
         data.password = await bcrypt.hash(data.password, salt);
@@ -53,21 +56,30 @@ const createUser = async (req, res) => {
 const getUsers = async (req, res) => {
     try {
         let users;
-        let { page, size, userType } = req.query;
+        let { page, size, userType, username } = req.query;
         if(!userType) userType = "artist";
         if(!page) page = 0;
         if(!size || size === "0") size = 20;
+        if(!username || username === "") username = "";
+
         page = parseInt(page);
         size = parseInt(size);
+
+        const whereConditions = {
+            userType: userType
+        };
+        if(username) {
+            whereConditions.username = {
+                [Op.like]: `%${username}%`
+            }
+        }
 
         if(page === 0) {
             users = await User.findAll({
                 attributes: {
                     exclude: ['password']
                 },
-                where: {
-                    userType: userType
-                },
+                where: whereConditions,
             });
         }
         if(page === 1) {
@@ -76,9 +88,7 @@ const getUsers = async (req, res) => {
                 attributes: {
                     exclude: ['password']
                 },
-                where: {
-                    userType: userType
-                },
+                where: whereConditions,
             });
         }
         if(page > 1) {
@@ -88,9 +98,7 @@ const getUsers = async (req, res) => {
                 attributes: {
                     exclude: ['password']
                 },
-                where: {
-                    userType: userType
-                },
+                where: whereConditions,
             });
         }
         return res.status(200).send({
@@ -100,19 +108,16 @@ const getUsers = async (req, res) => {
     }
     catch(e) {
         return res.status(500).send({
-            "error": e,
+            "error": `${e}`,
         });
     }
 }
 
-
-
 const getUserById = async (req, res) => {
     try {
-        let { id } = req.query;
-        id = parseInt(id);
+        const id = parseInt(req.params.id);
 
-        const user = await User.findAll({
+        const user = await User.findOne({
             where: {
                 id: id
             },
@@ -120,7 +125,7 @@ const getUserById = async (req, res) => {
                 exclude: ['password']
             },
         });
-        if(user[0] === undefined){
+        if(!user){
             return res.status(400).send({
                 "error": "User does not exist",
             });
@@ -128,72 +133,12 @@ const getUserById = async (req, res) => {
 
         return res.status(200).send({
             "status": "success",
-            "data": user[0]
+            "data": user
         });
     }
     catch(e) {
         return res.status(500).send({
-            "error": e,
-        });
-    }
-}
-
-const getUsersByName = async (req, res) => {
-    try {
-        let users;
-        let { page, size, userName, userType } = req.query;
-        if(!userType) userType = "artist";
-        if(!page) page = 0;
-        if(!size || size === "0") size = 20;
-        page = parseInt(page);
-        size = parseInt(size);
-
-        if(page === 0) {
-            users = await User.findAll({
-                where: {
-                  username: userName,
-                    userType: userType
-                },
-                attributes: {
-                    exclude: ['password']
-                },
-            });
-        }
-        if(page === 1) {
-            users = await User.findAll({
-                where: {
-                    username: userName,
-                    userType: userType
-                },
-                attributes: {
-                    exclude: ['password']
-                },
-                limit: size,
-            });
-        }
-        if(page > 1) {
-            users = await User.findAll({
-                where: {
-                    username: userName,
-                    userType: userType
-                },
-                attributes: {
-                    exclude: ['password']
-                },
-                limit: size,
-                offset: (page - 1) * size,
-            });
-        }
-
-        return res.status(200).send({
-            "status": "success",
-            "data": users,
-        });
-
-    }
-    catch(e) {
-        return res.status(500).send({
-            "error": e,
+            "error": `${e}`,
         });
     }
 }
@@ -221,8 +166,9 @@ const updateUser = async (req, res) => {
         return res.status(200).json({ "status": "success" });
     }
     catch(e) {
+        console.log(e)
         return res.status(500).send({
-            "error": e,
+            "error": `${e}`,
         });
     }
 }
@@ -248,9 +194,9 @@ const deleteUser = async (req, res) => {
     }
     catch(e) {
         return res.status(500).send({
-            "error": e,
+            "error": `${e}`,
         });
     }
 }
 
-export { createUser, getUsersByName, getUsers, getUserById, updateUser, deleteUser }
+export { createUser, getUsers, getUserById, updateUser, deleteUser }

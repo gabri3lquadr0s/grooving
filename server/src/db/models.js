@@ -26,7 +26,7 @@ const User = db.define(
         },
         active: {
             type: Sequelize.BOOLEAN,
-            notNull: true,
+            allowNull: false,
             default: false,
         },
         profileImage: {
@@ -42,6 +42,14 @@ const User = db.define(
         },
     }
 );
+
+//USER HISTORY TABLE
+const User_History = db.define(
+    "User_History",
+    {
+
+    }
+)
 
 //PLAYLIST TABLE
 const PlaysList = db.define(

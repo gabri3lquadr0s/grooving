@@ -1,31 +1,19 @@
 const createAlbum = async (req, res) => {
     try {
-
+        const data = req.body;
+        const user = req.user;
+        console.log(user);
+        return res.status(201).send({
+            "status": "success",
+            "data": {},
+        });
     }
     catch(e) {
 
     }
 }
 
-const getAlbumByArtist = async (req, res) => {
-    try {
-
-    }
-    catch(e) {
-
-    }
-}
-
-const getAlbumByGenre = async (req, res) => {
-    try {
-
-    }
-    catch(e) {
-
-    }
-}
-
-const getAlbumByName = async (req, res) => {
+const getAlbums = async (req, res) => {
     try {
 
     }
@@ -51,3 +39,5 @@ const deleteAlbum = async (req, res) => {
 
     }
 }
+
+export {createAlbum, deleteAlbum, getAlbumById, getAlbums}
