@@ -49,7 +49,8 @@ const createAlbum = async (req, res) => {
                 name: song.originalname.split(".")[0],
                 totalTimeSec: totalTimeInSec,
                 link: upload,
-                AlbumId: createAlbum.dataValues.id
+                AlbumId: createAlbum.dataValues.id,
+                GenreId: data.genre
             });
         }
 

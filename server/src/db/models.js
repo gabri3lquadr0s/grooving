@@ -47,8 +47,17 @@ const User = db.define(
 const User_History = db.define(
     "User_History",
     {
-
-    }
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        createdAt: {
+            type: Sequelize.DATE,
+            defaultValue: DataTypes.NOW,
+        }
+    },
+    {timestamps: false}
 )
 
 //PLAYLIST TABLE
@@ -89,11 +98,6 @@ const Album = db.define(
         totalTimeSec: {
             type: Sequelize.INTEGER,
         },
-        createdAt: {
-            type: Sequelize.DATE,
-            allowNull: false,
-            default: Sequelize.NOW,
-        },
         albumImage: {
             type: Sequelize.STRING,
             allowNull: false,
@@ -113,7 +117,8 @@ const Genre = db.define(
             type: Sequelize.STRING,
             allowNull: false,
         }
-    }
+    },
+    {timestamps: false}
 );
 
 //SONG TABLE
@@ -136,8 +141,14 @@ const Song = db.define(
         link: {
             type: Sequelize.STRING,
             allowNull: false,
+        },
+        totalPlays: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            default: 0
         }
     },
+    {timestamps: false}
 );
 
 //RELATIONS
@@ -146,6 +157,12 @@ Song.belongsTo(Album);
 
 User.hasMany(Album, {onDelete: 'CASCADE'});
 Album.belongsTo(User);
+
+User.hasMany(User, {onDelete: 'CASCADE'});
+User_History.belongsTo(User);
+
+Song.hasMany(User_History, {onDelete: 'CASCADE'});
+User_History.belongsTo(Song);
 
 const PlayList_User = db.define(
     "PlayList_User",
@@ -172,5 +189,5 @@ const Artist_Genre = db.define("Artist_Genre", {});
 User.belongsToMany(Genre, {through: "Artist_Genre"});
 Genre.belongsToMany(User, {through: "Artist_Genre"});
 
-export { User, PlaysList, Album, Song, Genre, PlayList_User, Song_PlayList, Song_Genre, Artist_Genre}
+export { User, PlaysList, Album, Song, Genre, PlayList_User, Song_PlayList, Song_Genre, Artist_Genre, User_History }
 

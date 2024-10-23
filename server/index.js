@@ -6,6 +6,7 @@ import userRoutes from './src/routes/user/user-routes.js';
 import albumRoutes from './src/routes/album/album-routes.js';
 import songRoutes from './src/routes/song/song-routes.js';
 import playlistRoutes from './src/routes/playlist/playlist-routes.js';
+import genreRoutes from "./src/routes/genre/genre-routes.js";
 import db from './src/db/db.js';
 import { User, PlaysList, Album, Song, Genre } from './src/db/models.js'
 
@@ -25,6 +26,7 @@ app.use("/v1/auth", authRoutes);
 app.use("/v1/user", userRoutes);
 app.use("/v1/album", albumRoutes);
 app.use("/v1/song", songRoutes);
+app.use("/v1/genre", genreRoutes);
 app.use("/v1/playlist", playlistRoutes);
 app.get('/', (req, res) => {
     return res.status(200).json({"msg": "Welcome to the Grooving API"});
