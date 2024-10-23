@@ -148,8 +148,8 @@ const updateUser = async (req, res) => {
         const id = parseInt(req.params.id);
         const data = req.body;
 
-        const userExists = await User.findAll({where: {id: id}});
-        if(userExists[0] === undefined){
+        const userExists = await User.findOne({where: {id: id}});
+        if(!userExists){
             return res.status(400).send({
                 "error": "User does not exist",
             });
@@ -177,8 +177,8 @@ const deleteUser = async (req, res) => {
     try {
         const id = parseInt(req.params.id);
 
-        const userExists = await User.findAll({where: {id: id}});
-        if(userExists[0] === undefined){
+        const userExists = await User.findOne({where: {id: id}});
+        if(!userExists){
             return res.status(400).send({
                 "error": "User does not exist",
             });
