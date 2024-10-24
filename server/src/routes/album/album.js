@@ -1,6 +1,6 @@
 import {parseStream} from "music-metadata";
 import {uploadAudio, uploadImage} from "../../cloudinary/cloudinary.js";
-import {Album, Song} from "../../db/models.js";
+import {Album, Song, Song_Genre} from "../../db/models.js";
 import {Readable} from "node:stream";
 import {Op} from "sequelize";
 
@@ -51,6 +51,10 @@ const createAlbum = async (req, res) => {
                 link: upload,
                 AlbumId: createAlbum.dataValues.id,
                 GenreId: data.genre
+            });
+            const createRelationWithGenre = await Song_Genre.create({
+                SongId: createSong.dataValues.id,
+                GenreId: data.genre,
             });
         }
 

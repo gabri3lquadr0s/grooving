@@ -144,8 +144,8 @@ const Song = db.define(
         },
         totalPlays: {
             type: Sequelize.INTEGER,
+            defaultValue: 0,
             allowNull: false,
-            default: 0
         }
     },
     {timestamps: false}
