@@ -158,7 +158,7 @@ Song.belongsTo(Album);
 User.hasMany(Album, {onDelete: 'CASCADE'});
 Album.belongsTo(User);
 
-User.hasMany(User, {onDelete: 'CASCADE'});
+User.hasMany(User_History, {onDelete: 'CASCADE'});
 User_History.belongsTo(User);
 
 Song.hasMany(User_History, {onDelete: 'CASCADE'});

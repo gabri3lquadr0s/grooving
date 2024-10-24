@@ -55,6 +55,11 @@ const validate = async (req, res, next) => {
                     "error": "Unauthorized",
                 });
             }
+            if(method === "createGenre" || method === "deleteGenre") {
+                if(user.userType !== "admin") return res.status(401).send({
+                    "error": "Unauthorized",
+                });
+            }
             if(method === "multerMiddleware") {
                 method = req.route.stack[2].method;
                 if(method === "createAlbum" || method === "deleteAlbum") {

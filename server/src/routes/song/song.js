@@ -110,7 +110,6 @@ const updateSongPlays = async (req, res) => {
 
         return res.status(200).send({
             "status": "success",
-            "data": song
         });
     }
     catch(e) {
