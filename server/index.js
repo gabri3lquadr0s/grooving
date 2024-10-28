@@ -8,6 +8,7 @@ import songRoutes from './src/routes/song/song-routes.js';
 import playlistRoutes from './src/routes/playlist/playlist-routes.js';
 import genreRoutes from "./src/routes/genre/genre-routes.js";
 import db from './src/db/db.js';
+import cors from "cors";
 import { User, PlaysList, Album, Song, Genre } from './src/db/models.js'
 
 dotenv.config();
@@ -21,6 +22,7 @@ cloudinary.config({
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+//app.use(cors);
 
 app.use("/v1/auth", authRoutes);
 app.use("/v1/user", userRoutes);
@@ -33,7 +35,7 @@ app.get('/', (req, res) => {
 });
 
 try {
-    db.sync({})
+    db.sync({"force": true})
         .then(() => {
             console.log("All models were synchronized successfully.");
         })

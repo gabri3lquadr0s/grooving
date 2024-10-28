@@ -5,10 +5,15 @@ import * as bcrypt from 'bcrypt';
 const login = async (req, res) => {
     try {
         const {email, password} = req.body;
-        const userExists = await User.findAll({where: {email: email}});
-        if(userExists[0] === undefined) {
+        const userExists = await User.findOne({where: {email: email}});
+        if(!userExists) {
             return res.status(400).send({
                 "error": "Incorrect email or password",
+            });
+        }
+        if(!userExists.active) {
+            return res.status(400).send({
+                "error": "User not active",
             });
         }
 

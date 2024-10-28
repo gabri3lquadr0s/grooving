@@ -170,7 +170,7 @@ const PlayList_User = db.define(
         isOwner: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
-            default: false,
+            defaultValue: false,
         },
     },
 );
