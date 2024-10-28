@@ -24,8 +24,18 @@ const Login = () => {
             }
         }
         catch(e) {
-            console.log(e);
-            Alert.alert("Email or password incorrect, please check.");
+            let err = e.response.data.error;
+            console.log(err);
+            if(err === "User not active") {
+                Alert.alert("User is not active, please complete subscription!");
+                router.push("/Stripe");
+            }
+            if(err === "Incorrect email or password") {
+                Alert.alert("Email or password incorrect, please check.");
+            }
+            else {
+                Alert.alert("Unknown error, please try again later!.");
+            }
         }
     }
 
