@@ -101,23 +101,15 @@ const RegisterUser = () => {
                     secureTextEntry={true}
                 />
                 {profilePic !== null ? (
-                    // <Image source={{ uri: profilePic.uri }} style={styles.image} />
                         <Pressable onPress={pickImage} style={styles.buttonImg}>
-                            {/*<Text style={styles.buttonText}>Pick profile picture</Text>*/}
                             <Image source={{ uri: profilePic.uri }} style={styles.image} />
                         </Pressable>
                     )
                 : (
-                    // <Image source={require('../../assets/images/default.jpg')} style={styles.image} />
                         <Pressable onPress={pickImage} style={styles.buttonImg}>
-                            {/*<Text style={styles.buttonText}>Pick profile picture</Text>*/}
                             <Image source={require('../../assets/images/default.jpg')} style={styles.image} />
                         </Pressable>
                     )}
-                {/*<Pressable onPress={pickImage} style={styles.button}>*/}
-                {/*    /!*<Text style={styles.buttonText}>Pick profile picture</Text>*!/*/}
-                {/*    <Image source={{ uri: profilePic.uri }} style={styles.image} />*/}
-                {/*</Pressable>*/}
                 <Pressable style={styles.button} onPress={registerUser}>
                     <Text style={styles.buttonText}>Create account</Text>
                 </Pressable>

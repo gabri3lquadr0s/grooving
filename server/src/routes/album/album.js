@@ -1,6 +1,6 @@
 import {parseStream} from "music-metadata";
 import {uploadAudio, uploadImage} from "../../cloudinary/cloudinary.js";
-import {Album, Song, Song_Genre} from "../../db/models.js";
+import {Album, Song, Song_Genre, User} from "../../db/models.js";
 import {Readable} from "node:stream";
 import {Op} from "sequelize";
 
@@ -78,11 +78,12 @@ const createAlbum = async (req, res) => {
 const getAlbums = async (req, res) => {
     try {
         let albums;
-        let { page, size, type, name } = req.query;
+        let { page, size, type, name, trending, includeSongs } = req.query;
         if(!type) type = "lp";
         if(!page) page = 0;
         if(!size || size === "0") size = 20;
         if(!name || name === "") name = "";
+        if(!includeSongs) includeSongs = false;
 
         page = parseInt(page);
         size = parseInt(size);
@@ -90,27 +91,27 @@ const getAlbums = async (req, res) => {
         const whereConditions = {
             type: type
         };
+        const includeConditions = [{model: User, attributes: ["username"]}]
         if(name) {
             whereConditions.name = {
                 [Op.like]: `%${name}%`
             }
         }
+        if(includeSongs) {
+            includeConditions.push({model: Song});
+        }
 
         if(page === 0) {
             albums = await Album.findAll({
                 where: whereConditions,
-                include: {
-                    model: Song,
-                },
+                include: includeConditions
             });
         }
         if(page === 1) {
             albums = await Album.findAll({
                 limit: size,
                 where: whereConditions,
-                include: {
-                    model: Song,
-                },
+                include: includeConditions
             });
         }
         if(page > 1) {
@@ -118,9 +119,7 @@ const getAlbums = async (req, res) => {
                 limit: size,
                 offset: (page - 1) * size,
                 where: whereConditions,
-                include: {
-                    model: Song,
-                },
+                include: includeConditions
             });
         }
         return res.status(200).send({

@@ -3,11 +3,12 @@ import { AppContext } from "../../scripts/AppContext";
 import {View, StyleSheet, Text, Image, Pressable, TextInput, Alert } from "react-native";
 import axios from 'axios';
 import { router } from "expo-router";
+import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const {setToken} = useContext(AppContext);
+    const {setToken, setUser} = useContext(AppContext);
 
     const loginAsync = async () => {
         if(!email || !password) return;
@@ -17,18 +18,21 @@ const Login = () => {
                 {"email":email,"password":password}
             );
             setToken(res.data.token);
-            if(res.data.userType === "user") {
-                router.push("/HomeUser");
+            const user = jwtDecode(res.data.token);
+            setUser(user);
+            if(user.userType === "user") {
+                router.push("/screens/HomeUser");
             } else {
-                router.push("/HomeArtist");
+                router.push("/screens/HomeArtist");
             }
         }
         catch(e) {
+            console.log(e)
             let err = e.response.data.error;
             console.log(err);
             if(err === "User not active") {
                 Alert.alert("User is not active, please complete subscription!");
-                router.push("/Stripe");
+                router.push("/screens/Stripe");
             }
             if(err === "Incorrect email or password") {
                 Alert.alert("Email or password incorrect, please check.");

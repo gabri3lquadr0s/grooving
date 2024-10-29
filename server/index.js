@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 });
 
 try {
-    db.sync({"force": true})
+    db.sync()
         .then(() => {
             console.log("All models were synchronized successfully.");
         })
