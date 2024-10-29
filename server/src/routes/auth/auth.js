@@ -17,10 +17,10 @@ const login = async (req, res) => {
             });
         }
 
-        const isMatch = await bcrypt.compare(password, userExists[0].password);
+        const isMatch = await bcrypt.compare(password, userExists.password);
         if (isMatch) {
             let token =  await jwt.sign(
-                { id: userExists[0].id, email: userExists[0].email, userType: userExists[0].userType },
+                { id: userExists.id, email: userExists.email, userType: userExists.userType },
                 process.env.JWT_SECRET,
                 { expiresIn: '2h' }
                 );
