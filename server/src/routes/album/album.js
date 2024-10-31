@@ -40,7 +40,7 @@ const createAlbum = async (req, res) => {
         for(let song of songs){
             const metadata = await parseStream(bufferToStream(song.buffer), null, {duration: true});
             const durationsInSecs = Math.floor(metadata.format.duration);
-            totalTimeInSec += durationsInSecs;
+            totalTimeInSec = totalTimeInSec + durationsInSecs;
             const upload = await uploadAudio(song);
             if(upload === "err") return res.status(500).send({
                 "error": "There was an error in uploading the songs",
@@ -142,9 +142,7 @@ const getAlbumById = async (req, res) => {
             where: {
                 id: id
             },
-            include: {
-                model: Song,
-            },
+            include: [{model: Song},{model: User, attributes: ["username"]}],
         });
         if(!album){
             return res.status(400).send({
