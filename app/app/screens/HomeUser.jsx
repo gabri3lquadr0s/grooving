@@ -5,43 +5,60 @@ import { AppContext } from "../../scripts/AppContext";
 import { router } from "expo-router";
 import AlbumView from "../../components/AlbumView";
 import SearchView from "../../components/SearchView";
+import MyPage from "./MyPage";
 
 const HomeUser = () => {
-    const [homeSelected, setHomeSelected] = useState(true);
+    const [pageSelected, setPageSelected] = useState(0);
 
     return(
         <View style={styles.container}>
             <View style={styles.header}>
-                {homeSelected ? (
+                {pageSelected === 0 &&
                     <View style={styles.containerHeader}>
-                        <Pressable style={styles.pressableHeaderSelected} onPress={() => {setHomeSelected(true)}}>
+                        <Pressable style={styles.pressableHeaderSelected} onPress={() => {setPageSelected(0)}}>
                             <Text style={styles.headerText}>Home</Text>
                         </Pressable>
-                        <Pressable style={styles.pressableHeader} onPress={() => {setHomeSelected(false)}}>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(1)}}>
                             <Text style={styles.headerText}>Search</Text>
                         </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(2)}}>
+                            <Text style={styles.headerText}>You</Text>
+                        </Pressable>
                     </View>
-                ) : (
+                }
+                {pageSelected === 1 &&
                     <View style={styles.containerHeader}>
-                        <Pressable style={styles.pressableHeader} onPress={() => {setHomeSelected(true)}}>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(0)}}>
                             <Text style={styles.headerText}>Home</Text>
                         </Pressable>
-                        <Pressable style={styles.pressableHeaderSelected} onPress={() => {setHomeSelected(false)}}>
+                        <Pressable style={styles.pressableHeaderSelected} onPress={() => {setPageSelected(1)}}>
                             <Text style={styles.headerText}>Search</Text>
                         </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(2)}}>
+                            <Text style={styles.headerText}>You</Text>
+                        </Pressable>
                     </View>
-                )}
+                }
+                {pageSelected === 2 &&
+                    <View style={styles.containerHeader}>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(0)}}>
+                            <Text style={styles.headerText}>Home</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(1)}}>
+                            <Text style={styles.headerText}>Search</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeaderSelected} onPress={() => {setPageSelected(2)}}>
+                            <Text style={styles.headerText}>You</Text>
+                        </Pressable>
+                    </View>
+                }
                 <Pressable style={styles.pressableImageHeader}>
                     <Image style={styles.imageHeader} />
                 </Pressable>
             </View>
-            {
-                homeSelected ? (
-                    <AlbumView />
-                ) : (
-                    <SearchView />
-                )
-            }
+            {pageSelected === 0 && <AlbumView />}
+            {pageSelected === 1 && <SearchView />}
+            {pageSelected === 2 && <MyPage />}
         </View>
     )
 }

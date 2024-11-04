@@ -122,6 +122,7 @@ const getAlbums = async (req, res) => {
                 include: includeConditions
             });
         }
+
         return res.status(200).send({
             "status": "success",
             "data": albums,

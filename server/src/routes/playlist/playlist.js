@@ -17,14 +17,15 @@ const createPlaylist = async (req, res) => {
                 name: name,
             }
         });
-        const checkIfExistsInUser = await PlayList_User.findOne({
-            where: {
-                PlayListId: checkIfExistsWithSameName.id,
-                UserId: user,
-            },
-        });
-        if(checkIfExistsInUser && checkIfExistsInUser) {
-            return res.status(400).send({
+
+        if(checkIfExistsWithSameName) {
+            const checkIfExistsInUser = await PlayList_User.findOne({
+                where: {
+                    PlayListId: checkIfExistsWithSameName.id,
+                    UserId: user,
+                },
+            });
+            if(checkIfExistsInUser) return res.status(400).send({
                 "error": "PlayList name already exists",
             });
         }
@@ -39,7 +40,7 @@ const createPlaylist = async (req, res) => {
             playlistImage: playlistImage,
         });
         const associatePlaylistWithUser = await PlayList_User.create({
-            PlaysListId: createPlaylist.id,
+            PlayListId: createPlaylist.id,
             UserId: user,
             isOwner: true,
         });
@@ -59,10 +60,11 @@ const createPlaylist = async (req, res) => {
 const getPlaylists = async (req, res) => {
     try {
         let playlists;
-        let { page, size, name } = req.query;
+        let { page, size, name, user } = req.query;
         if(!page) page = 0;
         if(!size || size === "0") size = 20;
         if(!name || name === "") name = "";
+        if(!user || user === "") user = "";
 
         const whereConditions = {};
         if(name) {
@@ -70,16 +72,27 @@ const getPlaylists = async (req, res) => {
                 [Op.like]: `%${name}%`
             }
         }
+        const includeConditions = [];
+        if (user) {
+            includeConditions.push({
+                model: User,
+                where: { id: user },
+                attributes: [],
+                as: "Users"
+            });
+        }
 
         if(page === 0) {
             playlists = await PlaysList.findAll({
                 where: whereConditions,
+                include: includeConditions
             });
         }
         if(page === 1) {
             playlists = await PlaysList.findAll({
                 where: whereConditions,
                 limit: size,
+                include: includeConditions
             });
         }
         if(page > 1) {
@@ -87,8 +100,10 @@ const getPlaylists = async (req, res) => {
                 where: whereConditions,
                 limit: size,
                 offset: (page - 1) * size,
+                include: includeConditions
             });
         }
+        console.log(playlists)
 
         return res.status(200).send({
             "status": "success",
@@ -96,6 +111,7 @@ const getPlaylists = async (req, res) => {
         });
     }
     catch(e) {
+        console.log(e)
         return res.status(500).send({
             "error": `${e}`,
         });
@@ -149,7 +165,7 @@ const songAction = async (req, res) => {
             });
         }
 
-        if(data.constructor === Array || data[0] === undefined) {
+        if(data.constructor !== Array || data[0] === undefined) {
             return res.status(400).send({
                 "error": "No songs in body",
             });
@@ -185,8 +201,10 @@ const songAction = async (req, res) => {
                     continue;
                 }
                 const associateSongWithPlaylist = await Song_PlayList.destroy({
-                    PlayListId: playlist,
-                    SongId: song,
+                    where: {
+                        PlayListId: playlist,
+                        SongId: song,
+                    }
                 });
             }
         }

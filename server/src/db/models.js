@@ -174,8 +174,8 @@ const PlayList_User = db.define(
         },
     },
 );
-PlaysList.belongsToMany(User, {through: "PlayList_User", onDelete: 'CASCADE'});
-User.belongsToMany(PlaysList, {through: "PlayList_User", onDelete: 'CASCADE'});
+PlaysList.belongsToMany(User, {through: "PlayList_User", onDelete: 'CASCADE', as: 'Users'});
+User.belongsToMany(PlaysList, {through: "PlayList_User", onDelete: 'CASCADE', as: 'PlayLists'});
 
 const Song_PlayList = db.define("Song_PlayList", {});
 Song.belongsToMany(PlaysList, {through: "Song_PlayList", onDelete: 'CASCADE'});
