@@ -6,6 +6,7 @@ import { router } from "expo-router";
 import AlbumView from "../../components/AlbumView";
 import SearchView from "../../components/SearchView";
 import MyPage from "./MyPage";
+import Playlists from "./Playlists";
 
 const HomeUser = () => {
     const [pageSelected, setPageSelected] = useState(0);
@@ -22,6 +23,9 @@ const HomeUser = () => {
                             <Text style={styles.headerText}>Search</Text>
                         </Pressable>
                         <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(2)}}>
+                            <Text style={styles.headerText}>Playlists</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(3)}}>
                             <Text style={styles.headerText}>You</Text>
                         </Pressable>
                     </View>
@@ -35,6 +39,9 @@ const HomeUser = () => {
                             <Text style={styles.headerText}>Search</Text>
                         </Pressable>
                         <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(2)}}>
+                            <Text style={styles.headerText}>Playlists</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(3)}}>
                             <Text style={styles.headerText}>You</Text>
                         </Pressable>
                     </View>
@@ -48,6 +55,25 @@ const HomeUser = () => {
                             <Text style={styles.headerText}>Search</Text>
                         </Pressable>
                         <Pressable style={styles.pressableHeaderSelected} onPress={() => {setPageSelected(2)}}>
+                            <Text style={styles.headerText}>Playlists</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(3)}}>
+                            <Text style={styles.headerText}>You</Text>
+                        </Pressable>
+                    </View>
+                }
+                {pageSelected === 3 &&
+                    <View style={styles.containerHeader}>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(0)}}>
+                            <Text style={styles.headerText}>Home</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(1)}}>
+                            <Text style={styles.headerText}>Search</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeader} onPress={() => {setPageSelected(2)}}>
+                            <Text style={styles.headerText}>Playlists</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressableHeaderSelected} onPress={() => {setPageSelected(3)}}>
                             <Text style={styles.headerText}>You</Text>
                         </Pressable>
                     </View>
@@ -58,7 +84,8 @@ const HomeUser = () => {
             </View>
             {pageSelected === 0 && <AlbumView />}
             {pageSelected === 1 && <SearchView />}
-            {pageSelected === 2 && <MyPage />}
+            {pageSelected === 2 && <Playlists />}
+            {pageSelected === 3 && <MyPage />}
         </View>
     )
 }
@@ -87,7 +114,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     pressableHeaderSelected: {
-        width: 110,
+        width: 80,
         height: 45,
         borderRadius: 50,
         backgroundColor: '#3D0075',

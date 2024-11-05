@@ -1,10 +1,10 @@
 import React, {useState, useRef, useEffect, useContext} from "react";
-import {View, StyleSheet, Text, Image, Pressable, FlatList} from "react-native";
+import {View, StyleSheet, Text, Image, Pressable, FlatList, ScrollView} from "react-native";
 import { Link } from 'expo-router';
 import {AppContext} from "../scripts/AppContext";
 import axios from "axios";
 
-const AlbumView = (props) => {
+const AlbumView = () => {
     const [page, setPage] = useState(1);
     const [type, setType] = useState("lp");
     const {token} = useContext(AppContext);
@@ -42,35 +42,37 @@ const AlbumView = (props) => {
 
     return (
         <View style={styles.containerAlbumView}>
-            <View style={styles.collection}>
-                <Text style={styles.collectionText}>Get right back to listening</Text>
-                <FlatList data={trending}
-                          numColumns={2}
-                          contentContainerStyle={styles.flatList}
-                          renderItem={({item}) =>
-                              <Link href={{pathname: `/screens/Album/${item.id}`}} passHref>
-                                  <View style={styles.item}>
-                                        <Image source={{uri: item.albumImage}} style={styles.albumImage} />
-                                        <Text style={styles.albumName}>{item.name}</Text>
-                                        <Text style={styles.artistName}>{item.User.username}</Text>
-                                  </View>
-                              </Link>
-                          }
-                          keyExtractor={item => item.id.toString()}
-                />
-            </View>
-            <View style={styles.collection}>
-                <Text style={styles.collectionText}>Trending right now</Text>
-                {/*<FlatList data={trending} renderItem={Item} style={styles.collectionList} />*/}
-            </View>
-            <View style={styles.collection}>
-                <Text style={styles.collectionText}>Things you might like</Text>
-                {/*<FlatList data={} renderItem={} style={styles.collectionList} />*/}
-            </View>
-            <View style={styles.collection}>
-                <Text style={styles.collectionText}>Explore some genres</Text>
-                {/*<FlatList data={} renderItem={} style={styles.collectionList} />*/}
-            </View>
+            <ScrollView>
+                <View style={styles.collection}>
+                    <Text style={styles.collectionText}>Trending right now</Text>
+                    <FlatList data={trending}
+                              numColumns={2}
+                              contentContainerStyle={styles.flatList}
+                              renderItem={({item}) =>
+                                  <Link href={{pathname: `/screens/Album/${item.id}`}} passHref>
+                                      <View style={styles.item}>
+                                          <Image source={{uri: item.albumImage}} style={styles.albumImage} />
+                                          <Text style={styles.albumName}>{item.name}</Text>
+                                          <Text style={styles.artistName}>{item.User.username}</Text>
+                                      </View>
+                                  </Link>
+                              }
+                              keyExtractor={item => item.id.toString()}
+                    />
+                </View>
+                <View style={styles.collection}>
+                    <Text style={styles.collectionText}>Get right back to listening</Text>
+                    {/*<FlatList data={trending} renderItem={Item} style={styles.collectionList} />*/}
+                </View>
+                <View style={styles.collection}>
+                    <Text style={styles.collectionText}>Things you might like</Text>
+                    {/*<FlatList data={} renderItem={} style={styles.collectionList} />*/}
+                </View>
+                <View style={styles.collection}>
+                    <Text style={styles.collectionText}>Explore some genres</Text>
+                    {/*<FlatList data={} renderItem={} style={styles.collectionList} />*/}
+                </View>
+            </ScrollView>
         </View>
     )
 }

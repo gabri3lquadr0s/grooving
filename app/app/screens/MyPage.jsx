@@ -1,15 +1,15 @@
 import React, {useState, useRef, useEffect, useContext} from "react";
-import {View, StyleSheet, Text, Image, Pressable, FlatList} from "react-native";
+import {View, StyleSheet, Text, Image, Pressable, FlatList, ScrollView} from "react-native";
 import axios from 'axios';
 import { AppContext } from "../../scripts/AppContext";
-import { router } from "expo-router";
+import {Link, router} from "expo-router";
 import AlbumView from "../../components/AlbumView";
 import SearchView from "../../components/SearchView";
 
 const MyPage = () => {
     const {user, token} = useContext(AppContext);
     const [data, setData] = useState({});
-    const [playlists, setPlaylists] = useState([]);
+
 
     const getUserInfo = async () => {
         try {
@@ -23,25 +23,9 @@ const MyPage = () => {
             console.log(e);
         }
     }
-    const getUserPlaylists = async () => {
-        try {
-            const res = await axios.get(
-                `http://10.0.2.2:8000/v1/playlist?user=${user.id}`,
-                {headers: {Authorization: `Bearer ${token}`}}
-            )
-            console.log(res.data.data)
-            setPlaylists(res.data.data);
-        }
-        catch(e) {
-            console.log(e);
-        }
-    }
 
     useEffect(() => {
         getUserInfo();
-        getUserPlaylists();
-        console.log(data);
-        console.log(playlists);
     }, []);
 
     return(
@@ -61,24 +45,22 @@ const MyPage = () => {
                     <Text style={styles.pressableText}>Edit account</Text>
                 </Pressable>
             </View>
-            <View style={styles.playlistList}>
 
-            </View>
         </View>
     )
-    //.split("T")[0]
 }
 
 const styles = StyleSheet.create({
     image: {
         width: 150,
         height: 150,
+        marginTop: 50,
         marginBottom: 50,
         borderRadius: 300,
     },
     container: {
         flex: 1,
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: "#000"
     },
@@ -115,7 +97,7 @@ const styles = StyleSheet.create({
     pressableText: {
         color: '#fff',
         fontSize: 18
-    }
+    },
 })
 
 export default MyPage;
