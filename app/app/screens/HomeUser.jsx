@@ -5,8 +5,8 @@ import { AppContext } from "../../scripts/AppContext";
 import { router } from "expo-router";
 import AlbumView from "../../components/AlbumView";
 import SearchView from "../../components/SearchView";
-import MyPage from "./MyPage";
-import Playlists from "./Playlists";
+import MyPage from "../../components/MyPage";
+import Playlists from "../../components/Playlists";
 
 const HomeUser = () => {
     const [pageSelected, setPageSelected] = useState(0);
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     pressableHeader: {
-        width: 110,
+        width: 80,
         height: 45,
         borderRadius: 50,
         backgroundColor: '#0f0f0f',

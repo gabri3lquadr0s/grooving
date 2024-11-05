@@ -1,10 +1,10 @@
 import React, {useState, useRef, useEffect, useContext} from "react";
 import {View, StyleSheet, Text, Image, Pressable, FlatList, ScrollView} from "react-native";
 import axios from 'axios';
-import { AppContext } from "../../scripts/AppContext";
+import { AppContext } from "../scripts/AppContext";
 import {Link, router} from "expo-router";
-import AlbumView from "../../components/AlbumView";
-import SearchView from "../../components/SearchView";
+import AlbumView from "./AlbumView";
+import SearchView from "./SearchView";
 
 const MyPage = () => {
     const {user, token} = useContext(AppContext);
@@ -35,7 +35,7 @@ const MyPage = () => {
                     data.profileImage !== null ? (
                         <Image source={{ uri: data.profileImage }} style={styles.image} />
                     ) : (
-                        <Image source={require('../../assets/images/default.jpg')} style={styles.image} />
+                        <Image source={require('../assets/images/default.jpg')} style={styles.image} />
                     )
                 }
                 <Text style={styles.username}>{data.username}</Text>

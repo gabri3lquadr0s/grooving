@@ -1,10 +1,10 @@
 import React, {useState, useRef, useEffect, useContext} from "react";
 import {View, StyleSheet, Text, Image, Pressable, FlatList, ScrollView} from "react-native";
 import axios from 'axios';
-import { AppContext } from "../../scripts/AppContext";
+import { AppContext } from "../scripts/AppContext";
 import {Link, router} from "expo-router";
-import AlbumView from "../../components/AlbumView";
-import SearchView from "../../components/SearchView";
+import AlbumView from "./AlbumView";
+import SearchView from "./SearchView";
 
 const Playlists = () => {
     const {user, token} = useContext(AppContext);
@@ -32,7 +32,7 @@ const Playlists = () => {
             <View style={styles.headerplaylist}>
                 <Text style={styles.username}>Your playlists</Text>
                 <View style={styles.playButton}>
-                    <Image source={require("../../assets/images/plus.png")} style={styles.imgPlay}/>
+                    <Image source={require("../assets/images/plus.png")} style={styles.imgPlay}/>
                 </View>
             </View>
             {
