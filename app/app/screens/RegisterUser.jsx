@@ -35,7 +35,7 @@ const RegisterUser = () => {
 
         try {
             const res = await axios.post(
-                "http://10.0.2.2:8000/v1/user", //this route is for android emulator
+                    "http://10.0.2.2:8000/v1/user", //this route is for android emulator
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );

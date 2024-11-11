@@ -1,7 +1,6 @@
 import {User} from "../../db/models.js";
 import * as bcrypt from 'bcrypt';
 import {uploadImage} from "../../cloudinary/cloudinary.js";
-import whereCondition from "pg/lib/query.js";
 import {Op} from "sequelize";
 
 const createUser = async (req, res) => {
@@ -153,6 +152,17 @@ const updateUser = async (req, res) => {
             return res.status(400).send({
                 "error": "User does not exist",
             });
+        }
+
+        if(req.files) {
+            const imageFile = req.files['profilePic'][0];
+            const upload = await uploadImage(imageFile);
+            if(upload !== "err") data.profileImage = upload;
+        }
+
+        if(data.password) {
+            const salt = await bcrypt.genSalt();
+            data.password = await bcrypt.hash(data.password, salt);
         }
 
         const updateUser = await User.update(
