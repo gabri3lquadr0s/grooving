@@ -40,7 +40,7 @@ const RegisterUser = () => {
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
             Alert.alert("User created successfully.");
-            router.push("/Stripe");
+            router.push("/screens/Stripe");
         }
         catch(e) {
             console.log(e);

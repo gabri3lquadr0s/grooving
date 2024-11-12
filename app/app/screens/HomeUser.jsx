@@ -1,8 +1,5 @@
-import React, {useState, useRef, useEffect, useContext} from "react";
-import {View, StyleSheet, Text, Image, Pressable, FlatList} from "react-native";
-import axios from 'axios';
-import { AppContext } from "../../scripts/AppContext";
-import { router } from "expo-router";
+import React, {useState} from "react";
+import {View, StyleSheet, Text, Image, Pressable} from "react-native";
 import AlbumView from "../../components/AlbumView";
 import SearchView from "../../components/SearchView";
 import MyPage from "../../components/MyPage";

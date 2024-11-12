@@ -1,10 +1,25 @@
 import React, {useState, useRef, useEffect, useContext} from "react";
-import {View, StyleSheet, Text, Image, Pressable, FlatList} from "react-native";
+import {View, StyleSheet, Text, Image, Pressable, FlatList, TextInput} from "react-native";
 
 const SearchView = (props) => {
+    const [filter, setFilter] = useState(0);
+    const [data, setData] = useState([]);
+
+    const getInfo = async () => {
+        try {
+
+        }
+        catch(e) {
+
+        }
+    }
+
     return (
         <View>
-            <Text>searchviews</Text>
+            <View>
+                <TextInput />
+                {/*picker para filtro*/}
+            </View>
         </View>
     )
 }

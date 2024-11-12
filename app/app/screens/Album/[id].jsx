@@ -2,13 +2,13 @@ import React, {useState, useRef, useEffect, useContext} from "react";
 import {View, StyleSheet, Text, Image, Pressable, FlatList, ActivityIndicator, SafeAreaView} from "react-native";
 import axios from 'axios';
 import { AppContext } from "../../../scripts/AppContext";
-import {useLocalSearchParams} from "expo-router";
+import {router, useLocalSearchParams} from "expo-router";
 import { Link } from 'expo-router';
 
 const Album = () => {
     const { id } = useLocalSearchParams();
     const [album, setAlbum] = useState(null);
-    const {token} = useContext(AppContext);
+    const {token, setLine} = useContext(AppContext);
 
     const getAlbum = async () => {
         try {
@@ -17,6 +17,16 @@ const Album = () => {
                 {headers: {Authorization: `Bearer ${token}`}}
             );
             setAlbum(res.data.data);
+        }
+        catch(e) {
+            console.log(e);
+        }
+    }
+
+    const playAlbum = async () => {
+        try {
+            setLine(album.Songs);
+            router.push("/screens/Play")
         }
         catch(e) {
             console.log(e);
@@ -53,7 +63,9 @@ const Album = () => {
                 </View>
                 <View style={styles.controls}>
                     <View style={styles.playButton}>
-                        <Image source={require("../../../assets/images/play.png")} style={styles.imgPlay}/>
+                        <Pressable onPress={() => {playAlbum()}}>
+                            <Image source={require("../../../assets/images/play.png")} style={styles.imgPlay}/>
+                        </Pressable>
                     </View>
                 </View>
             </View>
