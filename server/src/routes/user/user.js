@@ -23,13 +23,14 @@ const createUser = async (req, res) => {
                 username: data.username,
             },
         });
+
         if(checkForUsername[0] !== undefined){
             return res.status(400).send({
                 "error": "Username already exists",
             });
         }
 
-        if(req.files) {
+        if(req.files.profilePic) {
             const imageFile = req.files['profilePic'][0];
             const upload = await uploadImage(imageFile);
             if(upload !== "err") data.profileImage = upload;
