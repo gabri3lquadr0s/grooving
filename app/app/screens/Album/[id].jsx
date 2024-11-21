@@ -16,6 +16,7 @@ const Album = () => {
                 `http://10.0.2.2:8000/v1/album/${id}`,
                 {headers: {Authorization: `Bearer ${token}`}}
             );
+            console.log(res.data.data)
             setAlbum(res.data.data);
         }
         catch(e) {
@@ -47,7 +48,6 @@ const Album = () => {
 
     return(
         <SafeAreaView style={styles.containerAlbumView}>
-
             <View style={styles.back}>
                 <Link href={"/screens/HomeUser"} style={styles.linkBack}>
                     <Image source={require("../../../assets/images/left-arrow.png")} style={styles.imgBack}/>
@@ -57,7 +57,9 @@ const Album = () => {
             <Text style={styles.albumName}>{album.name}</Text>
             <View style={styles.moreInfo}>
                 <View>
-                    <Text style={styles.infoArtistName}>{album.User.username}</Text>
+                    <Link href={`/screens/User/${User.id}`}>
+                        <Text style={styles.infoArtistName}>{album.User.username}</Text>
+                    </Link>
                     <Text style={styles.infoDesc}>{album.createdAt.split("T")[0]} - {album.type.toUpperCase()}</Text>
                     <Text style={styles.infoDesc}>{album.totalTimeSec}</Text>
                 </View>

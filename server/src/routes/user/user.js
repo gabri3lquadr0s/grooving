@@ -1,4 +1,4 @@
-import {User} from "../../db/models.js";
+import {Album, User} from "../../db/models.js";
 import * as bcrypt from 'bcrypt';
 import {uploadImage} from "../../cloudinary/cloudinary.js";
 import {Op} from "sequelize";
@@ -68,12 +68,17 @@ const getUsers = async (req, res) => {
         const whereConditions = {
             userType: userType
         };
+        const includeConditions = [];
         if(username) {
             whereConditions.username = {
                 [Op.like]: `%${username}%`
             }
         }
-
+        if(userType === "artist") {
+            includeConditions.push({
+                model: Album
+            })
+        }
         if(page === 0) {
             users = await User.findAll({
                 attributes: {

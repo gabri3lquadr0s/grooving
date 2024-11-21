@@ -38,6 +38,8 @@ const createAlbum = async (req, res) => {
         }
 
         for(let song of songs){
+            console.log(song)
+            //TO FIX --- CouldNotDetermineFileTypeError: Failed to determine audio format para alguns mp3 
             const metadata = await parseStream(bufferToStream(song.buffer), null, {duration: true});
             const durationsInSecs = Math.floor(metadata.format.duration);
             totalTimeInSec = totalTimeInSec + durationsInSecs;
@@ -69,6 +71,7 @@ const createAlbum = async (req, res) => {
         });
    }
     catch(e) {
+        console.log(e)
         return res.status(500).send({
             "error": `${e}`,
         });
