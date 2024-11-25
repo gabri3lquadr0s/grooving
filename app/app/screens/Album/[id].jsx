@@ -57,7 +57,9 @@ const Album = () => {
             <Text style={styles.albumName}>{album.name}</Text>
             <View style={styles.moreInfo}>
                 <View>
-                    <Text style={styles.infoArtistName}>{album.User.username}</Text>
+                    <Link href={{pathname: `/screens/User/${album.UserId}`}} passHref>
+                        <Text style={styles.infoArtistName}>{album.User.username}</Text>
+                    </Link>
                     <Text style={styles.infoDesc}>{album.createdAt.split("T")[0]} - {album.type.toUpperCase()}</Text>
                     <Text style={styles.infoDesc}>{album.totalTimeSec}</Text>
                 </View>

@@ -2,7 +2,7 @@ import {parseStream} from "music-metadata";
 import {uploadAudio, uploadImage} from "../../cloudinary/cloudinary.js";
 import {Album, Song, Song_Genre, User} from "../../db/models.js";
 import {Readable} from "node:stream";
-import {Op} from "sequelize";
+import {Op, where} from "sequelize";
 
 const createAlbum = async (req, res) => {
     try {
@@ -78,19 +78,21 @@ const createAlbum = async (req, res) => {
 const getAlbums = async (req, res) => {
     try {
         let albums;
-        let { page, size, type, name, trending, includeSongs } = req.query;
+        let { page, size, type, name, trending, includeSongs, artist } = req.query;
         if(!type) type = "lp";
         if(!page) page = 0;
         if(!size || size === "0") size = 20;
         if(!name || name === "") name = "";
         if(!includeSongs) includeSongs = false;
+        if(!artist) artist = null;
 
         page = parseInt(page);
         size = parseInt(size);
 
-        const whereConditions = {
-            type: type
-        };
+        const whereConditions = {};
+        if(type !== "all") {
+            whereConditions.type = type;
+        }
         const includeConditions = [{model: User, attributes: ["username"]}]
         if(name) {
             whereConditions.name = {
@@ -100,7 +102,10 @@ const getAlbums = async (req, res) => {
         if(includeSongs) {
             includeConditions.push({model: Song});
         }
-
+        if(artist) {
+            whereConditions.UserId = artist;
+        }
+        console.log(whereConditions)
         if(page === 0) {
             albums = await Album.findAll({
                 where: whereConditions,
