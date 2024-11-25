@@ -1,4 +1,4 @@
-import {User} from "../../db/models.js";
+import {Album, User} from "../../db/models.js";
 import * as bcrypt from 'bcrypt';
 import {uploadImage} from "../../cloudinary/cloudinary.js";
 import {Op} from "sequelize";
@@ -23,13 +23,14 @@ const createUser = async (req, res) => {
                 username: data.username,
             },
         });
+
         if(checkForUsername[0] !== undefined){
             return res.status(400).send({
                 "error": "Username already exists",
             });
         }
 
-        if(req.files) {
+        if(req.files.profilePic) {
             const imageFile = req.files['profilePic'][0];
             const upload = await uploadImage(imageFile);
             if(upload !== "err") data.profileImage = upload;
@@ -67,12 +68,17 @@ const getUsers = async (req, res) => {
         const whereConditions = {
             userType: userType
         };
+        const includeConditions = [];
         if(username) {
             whereConditions.username = {
                 [Op.like]: `%${username}%`
             }
         }
-
+        if(userType === "artist") {
+            includeConditions.push({
+                model: Album
+            })
+        }
         if(page === 0) {
             users = await User.findAll({
                 attributes: {
