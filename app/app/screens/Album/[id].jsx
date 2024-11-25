@@ -72,24 +72,23 @@ const Album = () => {
                 </View>
             </View>
 
-            <View style={styles.songsContainer}>
-                <FlatList
-                    data={album.Songs}
-                    contentContainerStyle={styles.flatList}
-                    renderItem={({item}) =>
-                        <Link href={{pathname: `/screens/Song/${item.id}`, params: item}} passHref style={styles.itemLink}>
-                            <View style={styles.item}>
-                                <Text style={styles.itemName}>{item.name}</Text>
-                                <View style={styles.itemInfo}>
-                                    <Text style={styles.infoDescSong}>{item.totalTimeSec}</Text>
-                                    <Text style={styles.infoDescSong}>{item.totalPlays}</Text>
-                                </View>
+            <FlatList
+                data={album.Songs}
+                contentContainerStyle={styles.flatList}
+                renderItem={({item}) =>
+                    <Link href={{pathname: `/screens/Song/${item.id}`, params: item}} passHref style={styles.itemLink}>
+                        <View style={styles.item}>
+                            <Text style={styles.itemName}>{item.name}</Text>
+                            <View style={styles.itemInfo}>
+                                <Text style={styles.infoDescSong}>{item.totalTimeSec}</Text>
+                                <Text style={styles.infoDescSong}>{item.totalPlays}</Text>
                             </View>
-                        </Link>
-                    }
-                    keyExtractor={item => item.id.toString()}
-                />
-            </View>
+                        </View>
+                    </Link>
+                }
+                keyExtractor={item => item.id.toString()}
+            />
+
         </SafeAreaView>
     )
 
@@ -156,7 +155,9 @@ const styles = StyleSheet.create({
         width: 350
     },
     flatList: {
-        width: 350
+        marginTop: 20,
+        width: 350,
+        flexGrow: 1,
     },
     itemLink: {
         width: 350,

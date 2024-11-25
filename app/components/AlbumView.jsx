@@ -46,7 +46,7 @@ const AlbumView = () => {
                 <View style={styles.collection}>
                     <Text style={styles.collectionText}>Trending right now</Text>
                     <FlatList data={trending}
-                              numColumns={2}
+                              horizontal={true}
                               contentContainerStyle={styles.flatList}
                               renderItem={({item}) =>
                                   <Link href={{pathname: `/screens/Album/${item.id}`}} passHref>
