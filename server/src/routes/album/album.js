@@ -41,6 +41,7 @@ const createAlbum = async (req, res) => {
             console.log(song)
             //TO FIX --- CouldNotDetermineFileTypeError: Failed to determine audio format para alguns mp3 
             const metadata = await parseStream(bufferToStream(song.buffer), null, {duration: true});
+            console.log(metadata);
             const durationsInSecs = Math.floor(metadata.format.duration);
             totalTimeInSec = totalTimeInSec + durationsInSecs;
             const upload = await uploadAudio(song);
@@ -84,7 +85,7 @@ const getAlbums = async (req, res) => {
         let { page, size, type, name, trending, includeSongs, artist } = req.query;
         if(!type) type = "lp";
         if(!page) page = 0;
-        if(!size || size === "0") size = 20;
+        if(!size || size === "0") size = 10;
         if(!name || name === "") name = "";
         if(!includeSongs) includeSongs = false;
         if(!artist) artist = null;
@@ -99,7 +100,7 @@ const getAlbums = async (req, res) => {
         const includeConditions = [{model: User, attributes: ["username"]}]
         if(name) {
             whereConditions.name = {
-                [Op.like]: `%${name}%`
+                [Op.iLike]: `%${name}%`
             }
         }
         if(includeSongs) {
@@ -108,7 +109,6 @@ const getAlbums = async (req, res) => {
         if(artist) {
             whereConditions.UserId = artist;
         }
-        console.log(whereConditions)
         if(page === 0) {
             albums = await Album.findAll({
                 where: whereConditions,

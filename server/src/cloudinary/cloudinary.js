@@ -29,9 +29,6 @@ const uploadImage = async (file) => {
 
 const uploadAudio = async (file) => {
     try {
-        if(file.size > 10000000) {
-            return "err";
-        }
         const audioResult = await new Promise(
             (resolve, reject) => {
                 const stream = cloudinary.uploader.upload_stream(

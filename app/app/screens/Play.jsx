@@ -12,21 +12,21 @@ const Play = () => {
     const sound = React.useRef(new Audio.Sound());
 
 
-    // const retrieveSong = async () => {
-    //     try {
-    //         const toPlay = line[0];
-    //         setPlaying(toPlay);
-    //         const  sound = await Audio.Sound.createAsync({uri: toPlay.link});
-    //         await sound.playAsync();
-    //     }
-    //     catch(e) {
-    //         console.log(e)
-    //     }
-    // }
-    //
-    // useEffect(() => {
-    //     retrieveSong();
-    // }, []);
+    const retrieveSong = async () => {
+        try {
+            const toPlay = line[0];
+            setPlaying(toPlay);
+            const  sound = await Audio.Sound.createAsync({uri: toPlay.link});
+            await sound.playAsync();
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        retrieveSong();
+    }, []);
 
     return(
         <View>

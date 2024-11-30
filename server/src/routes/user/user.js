@@ -59,7 +59,7 @@ const getUsers = async (req, res) => {
         let { page, size, userType, username } = req.query;
         if(!userType) userType = "artist";
         if(!page) page = 0;
-        if(!size || size === "0") size = 20;
+        if(!size || size === "0") size = 10;
         if(!username || username === "") username = "";
 
         page = parseInt(page);
@@ -71,7 +71,7 @@ const getUsers = async (req, res) => {
         const includeConditions = [];
         if(username) {
             whereConditions.username = {
-                [Op.like]: `%${username}%`
+                [Op.iLike]: `%${username}%`
             }
         }
         if(userType === "artist") {

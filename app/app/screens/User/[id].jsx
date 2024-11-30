@@ -61,7 +61,7 @@ const User = () => {
             <View style={styles.info}>
                 {
                     user.profileImage !== null ? (
-                        <Image source={{ uri: data.profileImage }} style={styles.image} />
+                        <Image source={{ uri: user.profileImage }} style={styles.image} />
                     ) : (
                         <Image source={require('../../../assets/images/default.jpg')} style={styles.image} />
                     )
