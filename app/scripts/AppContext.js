@@ -4,7 +4,7 @@ export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
     const [token, setToken] = useState("");
     const [line, setLine] = useState([]);
-    const [songPlaying, setSongPlaying] = useState({});
+    const [songPlaying, setSongPlaying] = useState(null);
     const [playing, setPlaying] = useState(false);
     const [user, setUser] = useState("");
 
